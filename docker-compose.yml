@@ -11,7 +11,7 @@ services:
     networks:
       - edge
 
-  api:
+  bumdes_api:
     build: .
     restart: unless-stopped
     env_file:
