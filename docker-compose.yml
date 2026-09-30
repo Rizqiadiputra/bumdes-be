@@ -6,6 +6,8 @@ services:
       - .env
     environment:
       DB_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - edge
 
@@ -16,6 +18,8 @@ services:
       - .env
     environment:
       DB_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "${APP_PORT:-8080}:${APP_PORT:-8080}"
     depends_on:
@@ -31,6 +35,8 @@ services:
       - .env
     environment:
       DB_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     profiles:
       - tools
     networks:
@@ -44,7 +50,7 @@ services:
     environment:
       DB_HOST: host.docker.internal
     extra_hosts:
-      - "host.docker.internal"
+      - "host.docker.internal:host-gateway"
     profiles:
       - tools
     networks:
