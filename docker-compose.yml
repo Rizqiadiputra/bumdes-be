@@ -16,8 +16,6 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    environment:
-      DB_HOST: host.docker.internal
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
@@ -33,8 +31,6 @@ services:
     entrypoint: ["./seed"]
     env_file:
       - .env
-    environment:
-      DB_HOST: host.docker.internal
     extra_hosts:
       - "host.docker.internal:host-gateway"
     profiles:
@@ -47,8 +43,6 @@ services:
     entrypoint: ["./billing-cron"]
     env_file:
       - .env
-    environment:
-      DB_HOST: host.docker.internal
     extra_hosts:
       - "host.docker.internal:host-gateway"
     profiles:
