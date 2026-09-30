@@ -1,15 +1,61 @@
 services:
-  postgres:
-    image: postgres:16-alpine
-    restart: unless-stopped
+  migrate:
+    build: .
+    entrypoint: ["./migrate"]
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: bumdes
-    ports:
-      - "5432:5432"
-    volumes:
-      - bumdes_pgdata:/var/lib/postgresql/data
+      DB_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - edge
 
-volumes:
-  bumdes_pgdata:
+  api:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DB_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${APP_PORT:-8080}:${APP_PORT:-8080}"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - edge
+
+  seed:
+    build: .
+    entrypoint: ["./seed"]
+    env_file:
+      - .env
+    environment:
+      DB_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    profiles:
+      - tools
+    networks:
+      - edge
+
+  billing-cron:
+    build: .
+    entrypoint: ["./billing-cron"]
+    env_file:
+      - .env
+    environment:
+      DB_HOST: host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    profiles:
+      - tools
+    networks:
+      - edge
+
+networks:
+  edge:
+    external: true
