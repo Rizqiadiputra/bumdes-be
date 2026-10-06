@@ -25,6 +25,6 @@ COPY --from=builder /out/migrate ./migrate
 COPY --from=builder /out/seed ./seed
 COPY --from=builder /out/billing-cron ./billing-cron
 
-EXPOSE 8080
+EXPOSE 8282
 
 ENTRYPOINT ["./api"]
