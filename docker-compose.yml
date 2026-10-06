@@ -4,13 +4,8 @@ services:
     entrypoint: ["./migrate"]
     env_file:
       - .env
-    environment:
-      DB_HOST: host.docker.internal
     extra_hosts:
-      # "host-gateway" resolves to the default bridge's gateway (172.17.0.1), not this
-      # project's `edge` network gateway, so on a container only attached to `edge` it's
-      # unreachable (ENETUNREACH). Point it at `edge`'s actual gateway instead.
-      - "host.docker.internal:172.18.0.1"
+      - "host.docker.internal:host-gateway"
     networks:
       - edge
 
@@ -20,9 +15,9 @@ services:
     env_file:
       - .env
     extra_hosts:
-      - "host.docker.internal:172.18.0.1"
+      - "host.docker.internal:host-gateway"
     ports:
-      - "${APP_PORT:-8282}:${APP_PORT:-8282}"
+      - "${APP_PORT:-8080}:${APP_PORT:-8080}"
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -35,7 +30,7 @@ services:
     env_file:
       - .env
     extra_hosts:
-      - "host.docker.internal:172.18.0.1"
+      - "host.docker.internal:host-gateway"
     profiles:
       - tools
     networks:
@@ -47,7 +42,7 @@ services:
     env_file:
       - .env
     extra_hosts:
-      - "host.docker.internal:172.18.0.1"
+      - "host.docker.internal:host-gateway"
     profiles:
       - tools
     networks:
