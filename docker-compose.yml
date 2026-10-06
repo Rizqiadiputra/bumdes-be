@@ -1,16 +1,16 @@
 services:
-  # migrate:
-  #   build: .
-  #   entrypoint: ["./migrate"]
-  #   env_file:
-  #     - .env
-  #   extra_hosts:
-  #     # "host-gateway" resolves to the default bridge's gateway (172.17.0.1), not this
-  #     # project's `edge` network gateway, so on a container only attached to `edge` it's
-  #     # unreachable (ENETUNREACH). Point it at `edge`'s actual gateway instead.
-  #     - "host.docker.internal:172.18.0.1"
-  #   networks:
-  #     - edge
+  migrate:
+    build: .
+    entrypoint: ["./migrate"]
+    env_file:
+      - .env
+    extra_hosts:
+      # "host-gateway" resolves to the default bridge's gateway (172.17.0.1), not this
+      # project's `edge` network gateway, so on a container only attached to `edge` it's
+      # unreachable (ENETUNREACH). Point it at `edge`'s actual gateway instead.
+      - "host.docker.internal:172.18.0.1"
+    networks:
+      - edge
 
   bumdes_api:
     build: .
