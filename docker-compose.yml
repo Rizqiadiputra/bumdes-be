@@ -7,7 +7,10 @@ services:
     environment:
       DB_HOST: host.docker.internal
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      # "host-gateway" resolves to the default bridge's gateway (172.17.0.1), not this
+      # project's `edge` network gateway, so on a container only attached to `edge` it's
+      # unreachable (ENETUNREACH). Point it at `edge`'s actual gateway instead.
+      - "host.docker.internal:172.18.0.1"
     networks:
       - edge
 
@@ -17,7 +20,7 @@ services:
     env_file:
       - .env
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:172.18.0.1"
     ports:
       - "${APP_PORT:-8282}:${APP_PORT:-8282}"
     depends_on:
@@ -32,7 +35,7 @@ services:
     env_file:
       - .env
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:172.18.0.1"
     profiles:
       - tools
     networks:
@@ -44,7 +47,7 @@ services:
     env_file:
       - .env
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:172.18.0.1"
     profiles:
       - tools
     networks:
